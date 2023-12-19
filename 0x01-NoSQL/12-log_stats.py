@@ -8,13 +8,10 @@ Module: 12-log_stats.py
 from pymongo import MongoClient
 
 
-def log_stats():
+def log_stats(collection):
     """
     script that provides some stats about Nginx logs stored in MongoDB
     """
-    client = MongoClient('mongodb://127.0.0.1:27017')
-    db = client.logs
-    collection = db.nginx
 
     # Total logs
     total_logs = collection.count_documents({})
@@ -26,7 +23,7 @@ def log_stats():
     print("Methods:")
     for method in methods:
         count = collection.count_documents({"method": method})
-        print(f"    method {method}: {count}")
+        print(f"\tmethod {method}: {count}")
 
     # Status check stats
     status_check_count = collection.count_documents(
@@ -35,4 +32,7 @@ def log_stats():
 
 
 if __name__ == "__main__":
-    log_stats()
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    db = client.logs
+    collection = db.nginx
+    log_stats(collection)
