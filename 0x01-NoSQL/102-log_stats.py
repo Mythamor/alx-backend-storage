@@ -30,9 +30,6 @@ def log_stats(collection):
             {"method": "GET", "path": "/status"})
     print(f"{status_check_count} status check")
 
-    # Print the top 10 most present IPs
-    print("IPS:")
-
     pipeline = [
             {"$group": {"_id": "$ip", "count": {"$sum": 1}}},
             {"$sort": {"count": -1}},
@@ -41,7 +38,10 @@ def log_stats(collection):
 
     top_ips = collection.aggregate(pipeline)
 
+    print("IPS:")
+
     for ips in top_ips:
+        # Print the top 10 most present IPs
         print(f"\t{ips['_id']}: {ips['count']}")
 
 
